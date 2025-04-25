@@ -49,7 +49,7 @@ async def async_setup_entry(
             )
         )
     
-    await hass.config_entries.async_add_entities(entities)
+    async_add_entities(entities)
 
 class KinconySwitch(SwitchEntity):
     """Representation of a Kincony KC868 switch."""

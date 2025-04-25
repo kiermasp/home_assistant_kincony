@@ -21,7 +21,7 @@ CONF_INPUTS = "inputs"
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: ConfigEntry,
-    async_add_entities: Callable[[list[BinarySensorEntity]], Awaitable[None]],
+    async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up the Kincony KC868 binary sensors."""
     device_type = config_entry.data["device_type"]
@@ -49,7 +49,7 @@ async def async_setup_entry(
             )
         )
     
-    await async_add_entities(entities)
+    async_add_entities(entities)
 
 class KinconyBinarySensor(BinarySensorEntity):
     """Representation of a Kincony KC868 binary sensor."""
