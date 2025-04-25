@@ -1,0 +1,10 @@
+name: Kincony
+url: https://github.com/kiermasp/home_assistant_kincony
+maintainer: kiermasp
+description: Home Assistant integration for Kincony KC868 devices
+version: 0.1.0
+domain: kincony
+documentation: https://github.com/kiermasp/home_assistant_kincony
+issue_tracker: https://github.com/kiermasp/home_assistant_kincony/issues
+codeowners:
+  - kiermasp 
