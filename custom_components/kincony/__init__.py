@@ -29,7 +29,8 @@ CONFIG_SCHEMA = vol.Schema({
 
 async def _get_device_state(hass: HomeAssistant, device_id: str) -> dict | None:
     """Get the initial state from MQTT."""
-    topic = f"device/{device_id}/STATE"
+    device_type = "KC868_A64"  # Default device type
+    topic = f"{device_type}/{device_id}/STATE"
     
     try:
         # Subscribe to the topic and wait for a message
