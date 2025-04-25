@@ -1,1 +1,0 @@
-"""Tests for the Kincony KC868 integration.""" 

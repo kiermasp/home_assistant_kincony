@@ -8,11 +8,12 @@ from typing import Any
 
 import voluptuous as vol
 
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigFlow
 from homeassistant.core import HomeAssistant
 from homeassistant.const import CONF_DEVICE_ID
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.mqtt import async_subscribe
+from homeassistant.components import mqtt
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -32,6 +33,10 @@ async def _get_device_state(hass: HomeAssistant, device_id: str) -> dict | None:
     device_type = "KC868_A64"  # Default device type
     topic = f"{device_type}/{device_id}/STATE"
     
+
+    if not await mqtt.async_wait_for_mqtt_client(hass):
+        _LOGGER.error("MQTT integration is not available")
+        return
     try:
         # Subscribe to the topic and wait for a message
         message = await async_subscribe(
@@ -39,7 +44,7 @@ async def _get_device_state(hass: HomeAssistant, device_id: str) -> dict | None:
             topic,
             lambda msg: None,
             1,  # QoS
-            True,  # Retain
+            None,  # encoding parameter instead of retain
         )
         
         if message and hasattr(message, 'payload'):
@@ -49,7 +54,7 @@ async def _get_device_state(hass: HomeAssistant, device_id: str) -> dict | None:
     
     return None
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Kincony KC868 from a config entry."""
     hass.data.setdefault(DOMAIN, {})
     

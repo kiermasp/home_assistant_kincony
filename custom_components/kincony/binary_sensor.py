@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 import json
-from typing import Any
+from typing import Any, Callable, Awaitable
 
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.config_entries import ConfigEntry
@@ -21,7 +21,7 @@ CONF_INPUTS = "inputs"
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: Callable[[list[BinarySensorEntity]], Awaitable[None]],
 ) -> None:
     """Set up the Kincony KC868 binary sensors."""
     device_type = config_entry.data["device_type"]
