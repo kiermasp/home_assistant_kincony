@@ -1,0 +1,14 @@
+{
+    "entity": {
+        "binary_sensor": {
+            "input": {
+                "name": "Input {number}"
+            }
+        },
+        "switch": {
+            "output": {
+                "name": "Output {number}"
+            }
+        }
+    }
+} 

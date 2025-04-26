@@ -1,0 +1,58 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Urządzenie jest już skonfigurowane",
+            "invalid_discovery_info": "Nieprawidłowe informacje o wykryciu",
+            "mqtt_missing_payload": "Brakujący payload MQTT",
+            "invalid_payload": "Nieprawidłowy payload MQTT",
+            "no_entities": "Nie znaleziono wejść ani wyjść",
+            "discovery_failed": "Wykrywanie nie powiodło się"
+        },
+        "error": {
+            "cannot_connect": "Nie można połączyć się z urządzeniem"
+        },
+        "flow_title": "{device_type} {device_id}",
+        "step": {
+            "reconfigure": {
+                "data": {
+                    "host": "Host"
+                },
+                "data_description": {
+                    "host": "Nazwa hosta lub adres IP urządzenia do kontroli."
+                },
+                "description": "Aktualizacja konfiguracji dla {device_name}."
+            },
+            "user": {
+                "data": {
+                    "device_id": "ID urządzenia",
+                    "device_type": "Typ urządzenia"
+                },
+                "description": "Wprowadź dane urządzenia"
+            },
+            "confirm": {
+                "description": "Czy chcesz dodać urządzenie {device_type} o ID {device_id} do Home Assistant?\n\nZnaleziono {inputs} wejść i {outputs} wyjść.",
+                "title": "Wykryto urządzenie Kincony"
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "input": {
+                "name": "Wejście {number}"
+            }
+        },
+        "switch": {
+            "output": {
+                "name": "Wyjście {number}"
+            }
+        }
+    },
+    "exceptions": {
+        "cannot_connect": {
+            "message": "Wystąpił błąd podczas łączenia z urządzeniem {device}: {error}"
+        },
+        "update_error": {
+            "message": "Wystąpił błąd podczas pobierania danych z urządzenia {device}: {error}"
+        }
+    }
+} 
