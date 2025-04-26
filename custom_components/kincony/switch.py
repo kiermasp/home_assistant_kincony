@@ -139,10 +139,3 @@ class KinconySwitch(SwitchEntity):
             json.dumps(payload),
             retain=True,
         )
-
-    async def async_will_remove_from_hass(self) -> None:
-        """Clean up when entity is removed."""
-        if self._unsubscribe:
-            unsubscribe = self._unsubscribe
-            self._unsubscribe = None
-            await unsubscribe() 
