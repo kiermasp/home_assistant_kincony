@@ -3,40 +3,26 @@ from __future__ import annotations
 
 import logging
 import json
-import re
 from typing import Any
 
-import voluptuous as vol
-
-from homeassistant.config_entries import ConfigEntry, ConfigFlow
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.const import CONF_DEVICE_ID
-import homeassistant.helpers.config_validation as cv
-from homeassistant.components.mqtt import async_subscribe
 from homeassistant.components import mqtt
+from homeassistant.components.mqtt import async_subscribe
+
+from .const import DOMAIN, CONF_DEVICE_TYPE, CONF_DEVICE_ID, CONF_INPUTS, CONF_OUTPUTS
 
 _LOGGER = logging.getLogger(__name__)
-
-DOMAIN = "kincony"
-CONF_DEVICE_ID = "device_id"
-CONF_INPUTS = "inputs"
-CONF_OUTPUTS = "outputs"
-
-CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.Schema({
-        vol.Required(CONF_DEVICE_ID): cv.string,
-    })
-})
 
 async def _get_device_state(hass: HomeAssistant, device_id: str) -> dict | None:
     """Get the initial state from MQTT."""
     device_type = "KC868_A64"  # Default device type
     topic = f"{device_type}/{device_id}/STATE"
-    
 
     if not await mqtt.async_wait_for_mqtt_client(hass):
         _LOGGER.error("MQTT integration is not available")
-        return
+        return None
+
     try:
         # Subscribe to the topic and wait for a message
         message = await async_subscribe(
@@ -59,7 +45,7 @@ async def async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
     
     device_id = entry.data[CONF_DEVICE_ID]
-    device_type = entry.data.get("device_type", "KC868_A64")
+    device_type = entry.data.get(CONF_DEVICE_TYPE, "KC868_A64")
     
     # Get initial state to determine number of inputs and outputs
     state_message = await _get_device_state(hass, device_id)
