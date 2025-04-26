@@ -12,6 +12,7 @@ from homeassistant.components import mqtt
 from homeassistant.components.mqtt import async_subscribe
 from homeassistant.const import CONF_DEVICE_ID
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.service_info.mqtt import MqttServiceInfo
 
 from .const import DOMAIN, CONF_DEVICE_TYPE, CONF_INPUTS, CONF_OUTPUTS
 
@@ -91,36 +92,42 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_mqtt(self, discovery_info: dict[str, Any]) -> config_entries.ConfigFlowResult:
+    async def async_step_mqtt(self, discovery_info: MqttServiceInfo) -> config_entries.ConfigFlowResult:
         """Handle MQTT discovery."""
-        device_id = discovery_info.get("device_id")
-        device_type = discovery_info.get("device_type", "KC868_A64")
-
-        if not device_id:
+        if not discovery_info.payload:
+            return self.async_abort(reason="mqtt_missing_payload")
+    
+        # Extract device_id and device_type from MQTT topic
+        topic_parts = discovery_info.topic.split('/')
+        if len(topic_parts) >= 3:
+            device_type = topic_parts[0]
+            device_id = topic_parts[1]
+        else:
             return self.async_abort(reason="invalid_discovery_info")
 
         # Check if device is already configured
         await self.async_set_unique_id(f"{device_type}_{device_id}")
         self._abort_if_unique_id_configured()
 
-        # Try to get device state
-        state = await _get_device_state(self.hass, device_id)
-        if state is None:
-            return self.async_abort(reason="cannot_connect")
+        try:
+            # Parse the payload to get state
+            state = json.loads(discovery_info.payload)
+            
+            # Find all input and output keys
+            input_keys = [key for key in state.keys() if key.startswith("input")]
+            output_keys = [key for key in state.keys() if key.startswith("output")]
+            
+            if not input_keys and not output_keys:
+                return self.async_abort(reason="no_entities")
 
-        # Find all input and output keys
-        input_keys = [key for key in state.keys() if key.startswith("input")]
-        output_keys = [key for key in state.keys() if key.startswith("output")]
-        
-        if not input_keys and not output_keys:
-            return self.async_abort(reason="no_entities")
-
-        return self.async_create_entry(
-            title=f"{device_type} {device_id}",
-            data={
-                CONF_DEVICE_ID: device_id,
-                CONF_DEVICE_TYPE: device_type,
-                CONF_INPUTS: input_keys,
-                CONF_OUTPUTS: output_keys,
-            },
-        ) 
+            return self.async_create_entry(
+                title=f"{device_type} {device_id}",
+                data={
+                    CONF_DEVICE_ID: device_id,
+                    CONF_DEVICE_TYPE: device_type,
+                    CONF_INPUTS: input_keys,
+                    CONF_OUTPUTS: output_keys,
+                },
+            )
+        except json.JSONDecodeError:
+            return self.async_abort(reason="invalid_payload") 
