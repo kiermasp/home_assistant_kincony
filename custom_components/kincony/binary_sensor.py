@@ -11,12 +11,11 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.components.mqtt import async_subscribe
-from homeassistant.components.mqtt.models import ReceiveMessage
+from homeassistant.components.mqtt.models import ReceiveMessage, MqttValueTemplate
+
+from .const import DOMAIN, CONF_INPUTS
 
 _LOGGER = logging.getLogger(__name__)
-
-DOMAIN = "kincony"
-CONF_INPUTS = "inputs"
 
 async def async_setup_entry(
     hass: HomeAssistant,

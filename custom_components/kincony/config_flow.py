@@ -1,20 +1,19 @@
 """Config flow for Kincony KC868 integration."""
 from __future__ import annotations
 
-import logging
 import json
+import logging
 from typing import Any
 
 import voluptuous as vol
 
 from homeassistant import config_entries
-from homeassistant.core import HomeAssistant
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.components import mqtt
 from homeassistant.components.mqtt import async_subscribe
 from homeassistant.const import CONF_DEVICE_ID
+from homeassistant.core import HomeAssistant
 
-from .const import DOMAIN, CONF_DEVICE_TYPE
+from .const import DOMAIN, CONF_DEVICE_TYPE, CONF_INPUTS, CONF_OUTPUTS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -49,7 +48,7 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
-    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> config_entries.ConfigFlowResult:
         """Handle the initial step."""
         errors = {}
 
@@ -66,13 +65,22 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if state is None:
                 errors["base"] = "cannot_connect"
             else:
-                return self.async_create_entry(
-                    title=f"{device_type} {device_id}",
-                    data={
-                        CONF_DEVICE_ID: device_id,
-                        CONF_DEVICE_TYPE: device_type,
-                    },
-                )
+                # Find all input and output keys
+                input_keys = [key for key in state.keys() if key.startswith("input")]
+                output_keys = [key for key in state.keys() if key.startswith("output")]
+                
+                if not input_keys and not output_keys:
+                    errors["base"] = "no_entities"
+                else:
+                    return self.async_create_entry(
+                        title=f"{device_type} {device_id}",
+                        data={
+                            CONF_DEVICE_ID: device_id,
+                            CONF_DEVICE_TYPE: device_type,
+                            CONF_INPUTS: input_keys,
+                            CONF_OUTPUTS: output_keys,
+                        },
+                    )
 
         return self.async_show_form(
             step_id="user",
@@ -83,7 +91,7 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_mqtt(self, discovery_info: dict[str, Any]) -> FlowResult:
+    async def async_step_mqtt(self, discovery_info: dict[str, Any]) -> config_entries.ConfigFlowResult:
         """Handle MQTT discovery."""
         device_id = discovery_info.get("device_id")
         device_type = discovery_info.get("device_type", "KC868_A64")
@@ -100,10 +108,19 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if state is None:
             return self.async_abort(reason="cannot_connect")
 
+        # Find all input and output keys
+        input_keys = [key for key in state.keys() if key.startswith("input")]
+        output_keys = [key for key in state.keys() if key.startswith("output")]
+        
+        if not input_keys and not output_keys:
+            return self.async_abort(reason="no_entities")
+
         return self.async_create_entry(
             title=f"{device_type} {device_id}",
             data={
                 CONF_DEVICE_ID: device_id,
                 CONF_DEVICE_TYPE: device_type,
+                CONF_INPUTS: input_keys,
+                CONF_OUTPUTS: output_keys,
             },
         ) 

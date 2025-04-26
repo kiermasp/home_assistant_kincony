@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 import json
-from typing import Any
+from typing import Any, Callable, Awaitable
 
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
@@ -11,12 +11,11 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.components.mqtt import async_subscribe, async_publish
-from homeassistant.components.mqtt.models import ReceiveMessage
+from homeassistant.components.mqtt.models import ReceiveMessage, MqttValueTemplate
+
+from .const import DOMAIN, CONF_OUTPUTS
 
 _LOGGER = logging.getLogger(__name__)
-
-DOMAIN = "kincony"
-CONF_OUTPUTS = "outputs"
 
 async def async_setup_entry(
     hass: HomeAssistant,
