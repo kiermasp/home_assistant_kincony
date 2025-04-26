@@ -49,6 +49,10 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
+    def __init__(self) -> None:
+        """Initialize the config flow."""
+        self._discovered_device: dict[str, Any] | None = None
+
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> config_entries.ConfigFlowResult:
         """Handle the initial step."""
         errors = {}
@@ -120,14 +124,38 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if not input_keys and not output_keys:
                 return self.async_abort(reason="no_entities")
 
-            return self.async_create_entry(
-                title=f"{device_type} {device_id}",
-                data={
-                    CONF_DEVICE_ID: device_id,
-                    CONF_DEVICE_TYPE: device_type,
-                    CONF_INPUTS: input_keys,
-                    CONF_OUTPUTS: output_keys,
-                },
-            )
+            # Store the discovered device info
+            self._discovered_device = {
+                CONF_DEVICE_ID: device_id,
+                CONF_DEVICE_TYPE: device_type,
+                CONF_INPUTS: input_keys,
+                CONF_OUTPUTS: output_keys,
+            }
+
+            # Show confirmation form
+            return await self.async_step_confirm()
+
         except json.JSONDecodeError:
-            return self.async_abort(reason="invalid_payload") 
+            return self.async_abort(reason="invalid_payload")
+
+    async def async_step_confirm(self, user_input: dict[str, Any] | None = None) -> config_entries.ConfigFlowResult:
+        """Handle the confirmation step."""
+        if not self._discovered_device:
+            return self.async_abort(reason="discovery_failed")
+
+        if user_input is not None:
+            return self.async_create_entry(
+                title=f"{self._discovered_device[CONF_DEVICE_TYPE]} {self._discovered_device[CONF_DEVICE_ID]}",
+                data=self._discovered_device,
+            )
+
+        return self.async_show_form(
+            step_id="confirm",
+            description_placeholders={
+                "device_type": str(self._discovered_device[CONF_DEVICE_TYPE]),
+                "device_id": str(self._discovered_device[CONF_DEVICE_ID]),
+                "inputs": str(len(self._discovered_device[CONF_INPUTS])),
+                "outputs": str(len(self._discovered_device[CONF_OUTPUTS])),
+            },
+            data_schema=vol.Schema({}),
+        ) 
