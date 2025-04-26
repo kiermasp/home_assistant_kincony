@@ -132,6 +132,16 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 CONF_OUTPUTS: output_keys,
             }
 
+                
+            self.context.update(
+                {
+                    "title_placeholders": {
+                        "device_id": device_id,
+                        "device_type": device_type,
+                    }
+                }
+            )
+
             # Show confirmation form
             return await self.async_step_confirm()
 

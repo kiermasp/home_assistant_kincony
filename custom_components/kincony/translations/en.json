@@ -11,7 +11,7 @@
         "error": {
             "cannot_connect": "Failed to connect to device"
         },
-        "flow_title": "{model} {serial_number}",
+        "flow_title": "{device_type} {device_id}",
         "step": {
             "reconfigure": {
                 "data": {
