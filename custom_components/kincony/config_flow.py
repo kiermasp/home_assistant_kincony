@@ -1,4 +1,4 @@
-"""Config flow for Kincony KC868 integration."""
+"""Config flow for KinCony KC868 integration."""
 from __future__ import annotations
 
 import json
@@ -45,7 +45,7 @@ async def _get_device_state(hass: HomeAssistant, device_id: str) -> dict | None:
     return None
 
 class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Kincony KC868."""
+    """Handle a config flow for KinCony KC868."""
 
     VERSION = 1
 

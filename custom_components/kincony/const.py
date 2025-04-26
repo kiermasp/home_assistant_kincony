@@ -1,4 +1,4 @@
-"""Constants for the Kincony KC868 integration."""
+"""Constants for the KinCony KC868 integration."""
 
 DOMAIN = "kincony"
 CONF_DEVICE_TYPE = "device_type"

@@ -1,6 +1,6 @@
-# Home Assistant Kincony KC868 Integration
+# Home Assistant KinCony KC868 Integration
 
-This is a custom component for Home Assistant that integrates Kincony KC868 devices via MQTT.
+This is a custom component for Home Assistant that integrates KinCony KC868 devices via MQTT.
 
 ## Features
 
@@ -13,8 +13,9 @@ This is a custom component for Home Assistant that integrates Kincony KC868 devi
 ## Installation
 
 1. Install this custom component using HACS:
+
    - Add this repository to HACS
-   - Search for "Kincony KC868" in the HACS store
+   - Search for "KinCony KC868" in the HACS store
    - Click Install
 
 2. Restart Home Assistant
@@ -23,9 +24,9 @@ This is a custom component for Home Assistant that integrates Kincony KC868 devi
 
 1. In Home Assistant, go to Configuration > Integrations
 2. Click the "+ Add Integration" button
-3. Search for "Kincony KC868"
+3. Search for "KinCony KC868"
 4. Enter the following information:
-   - Device Type: The type of your Kincony device (e.g., "KC868_A64")
+   - Device Type: The type of your KinCony device (e.g., "KC868_A64")
    - Device ID: The unique ID of your device (e.g., "D4D4DAE11EA4")
 
 ## MQTT Topics
@@ -56,4 +57,4 @@ The state topic publishes a JSON payload with the following structure:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.

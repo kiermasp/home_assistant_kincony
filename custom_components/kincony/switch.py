@@ -1,4 +1,4 @@
-"""The Kincony KC868 switch platform."""
+"""The KinCony KC868 switch platform."""
 from __future__ import annotations
 
 import logging
@@ -22,7 +22,7 @@ async def async_setup_entry(
     config_entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up the Kincony KC868 switches."""
+    """Set up the KinCony KC868 switches."""
     device_type = config_entry.data["device_type"]
     device_id = config_entry.data["device_id"]
     
@@ -51,7 +51,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 class KinconySwitch(SwitchEntity):
-    """Representation of a Kincony KC868 switch."""
+    """Representation of a KinCony KC868 switch."""
 
     def __init__(
         self,
@@ -90,7 +90,7 @@ class KinconySwitch(SwitchEntity):
         return DeviceInfo(
             identifiers={(DOMAIN, self._device_id)},
             name=f"{self._device_type} {self._device_id}",
-            manufacturer="Kincony",
+            manufacturer="KinCony",
             model=self._device_type,
         )
 

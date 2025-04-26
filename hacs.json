@@ -1,5 +1,5 @@
 {
-    "name": "Kincony",
+    "name": "KinCony",
     "render_readme": true,
     "domains": ["binary_sensor", "switch"],
     "homeassistant": "2023.1.0",

@@ -1,4 +1,4 @@
-"""The Kincony KC868 integration."""
+"""The KinCony KC868 integration."""
 from __future__ import annotations
 
 import logging
@@ -16,10 +16,10 @@ from .const import DOMAIN, CONF_DEVICE_TYPE, CONF_DEVICE_ID, CONF_INPUTS, CONF_O
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up Kincony KC868 from a config entry."""
+    """Set up KinCony KC868 from a config entry."""
     hass.data.setdefault(DOMAIN, {})
 
-    _LOGGER.debug("Setting up Kincony KC868 from config entry")
+    _LOGGER.debug("Setting up KinCony KC868 from config entry")
     
     device_id = entry.data[CONF_DEVICE_ID]
     device_type = entry.data.get(CONF_DEVICE_TYPE)
