@@ -31,7 +31,7 @@
             },
             "confirm": {
                 "description": "Czy chcesz dodać urządzenie {device_type} o ID {device_id} do Home Assistant?\n\nZnaleziono {inputs} wejść i {outputs} wyjść.",
-                "title": "Wykryto urządzenie Kincony"
+                "title": "Wykryto urządzenie KinCony"
             }
         }
     },

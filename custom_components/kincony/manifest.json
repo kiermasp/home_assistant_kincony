@@ -1,6 +1,6 @@
 {
   "domain": "kincony",
-  "name": "Kincony",
+  "name": "KinCony",
   "documentation": "https://github.com/kiermasp/home_assistant_kincony",
   "dependencies": ["mqtt"],
   "codeowners": ["@kiermasp"],
