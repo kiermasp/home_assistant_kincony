@@ -94,6 +94,11 @@ class KinconyBinarySensor(BinarySensorEntity):
             model=self._device_type,
         )
 
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID."""
+        return f"{self._device_type}_{self._device_id}_{self._input_id}"
+
     async def _subscribe_mqtt(self) -> None:
         """Subscribe to MQTT topic."""
         topic = f"{self._device_type}/{self._device_id}/STATE"
