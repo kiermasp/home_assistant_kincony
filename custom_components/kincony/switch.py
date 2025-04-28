@@ -68,7 +68,7 @@ class KinconySwitch(SwitchEntity):
         self._output_id = output_id
         self._name = name
         self._state = False
-        self._unsubscribe = None
+        self._unsubscribe: Callable[[], None] | None = None
 
     async def async_added_to_hass(self) -> None:
         """Subscribe to MQTT events."""
@@ -139,3 +139,8 @@ class KinconySwitch(SwitchEntity):
             json.dumps(payload),
             retain=True,
         )
+
+    async def async_will_remove_from_hass(self) -> None:
+        """Unsubscribe from MQTT topic."""
+        if self._unsubscribe:
+            self._unsubscribe()
