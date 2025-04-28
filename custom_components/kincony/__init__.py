@@ -18,7 +18,7 @@ from .const import DOMAIN, CONF_DEVICE_TYPE, CONF_INPUTS, CONF_OUTPUTS, PLATFORM
 
 _LOGGER = logging.getLogger(__name__)
 
-async def async_setup(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Kincony KC868 from a config entry."""
     hass.data.setdefault(DOMAIN, {})
     
