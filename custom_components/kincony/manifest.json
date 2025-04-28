@@ -1,9 +1,9 @@
 {
   "domain": "kincony",
-  "name": "KinCony KC868",
-  "documentation": "https://github.com/yourusername/home_assistant_kincony",
+  "name": "KinCony Home Assistant Integration",
+  "documentation": "https://github.com/kiermasp/home_assistant_kincony",
   "dependencies": ["mqtt"],
-  "codeowners": ["@yourusername"],
+  "codeowners": ["@kiermasp"],
   "requirements": [],
   "integration_type": "hub",
   "version": "1.0.0",
