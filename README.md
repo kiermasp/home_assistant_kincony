@@ -26,7 +26,7 @@ This is a custom component for Home Assistant that integrates KinCony KC868 devi
 2. Click the "+ Add Integration" button
 3. Search for "KinCony KC868"
 4. Enter the following information:
-   - Device Type: The type of your KinCony device (e.g., "KC868_A64")
+   - Device Type: The type of your KinCony device (e.g., "KC868-A64")
    - Device ID: The unique ID of your device (e.g., "D4D4DAE11EA4")
 
 ## MQTT Topics

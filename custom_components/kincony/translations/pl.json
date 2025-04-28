@@ -9,7 +9,10 @@
             "discovery_failed": "Wykrywanie nie powiodło się"
         },
         "error": {
-            "cannot_connect": "Nie można połączyć się z urządzeniem"
+            "cannot_connect": "Nie można połączyć się z urządzeniem",
+            "missing_device_id": "ID urządzenia jest wymagane",
+            "missing_device_type": "Typ urządzenia jest wymagany",
+            "missing_entities": "Nie znaleziono wejść ani wyjść w konfiguracji"
         },
         "flow_title": "{device_type} {device_id}",
         "step": {

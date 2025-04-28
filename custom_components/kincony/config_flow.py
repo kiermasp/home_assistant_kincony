@@ -1,4 +1,4 @@
-"""Config flow for KinCony KC868 integration."""
+"""Config flow for Kincony KC868 integration."""
 from __future__ import annotations
 
 import json
@@ -18,9 +18,8 @@ from .const import DOMAIN, CONF_DEVICE_TYPE, CONF_INPUTS, CONF_OUTPUTS
 
 _LOGGER = logging.getLogger(__name__)
 
-async def _get_device_state(hass: HomeAssistant, device_id: str) -> dict | None:
+async def _get_device_state(hass: HomeAssistant, device_id: str, device_type: str) -> dict | None:
     """Get the initial state from MQTT."""
-    device_type = "KC868_A64"  # Default device type
     topic = f"{device_type}/{device_id}/STATE"
 
     if not await mqtt.async_wait_for_mqtt_client(hass):
@@ -45,7 +44,7 @@ async def _get_device_state(hass: HomeAssistant, device_id: str) -> dict | None:
     return None
 
 class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for KinCony KC868."""
+    """Handle a config flow for Kincony KC868."""
 
     VERSION = 1
 
@@ -59,14 +58,25 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             device_id = user_input[CONF_DEVICE_ID]
-            device_type = user_input.get(CONF_DEVICE_TYPE, "KC868_A64")
+            device_type = user_input.get(CONF_DEVICE_TYPE)
+
+            if not device_type:
+                errors["base"] = "missing_device_type"
+                return self.async_show_form(
+                    step_id="user",
+                    data_schema=vol.Schema({
+                        vol.Required(CONF_DEVICE_ID): str,
+                        vol.Required(CONF_DEVICE_TYPE): str,
+                    }),
+                    errors=errors,
+                )
 
             # Check if device is already configured
             await self.async_set_unique_id(f"{device_type}_{device_id}")
             self._abort_if_unique_id_configured()
 
             # Try to get device state
-            state = await _get_device_state(self.hass, device_id)
+            state = await _get_device_state(self.hass, device_id, device_type)
             if state is None:
                 errors["base"] = "cannot_connect"
             else:
@@ -91,7 +101,7 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema({
                 vol.Required(CONF_DEVICE_ID): str,
-                vol.Optional(CONF_DEVICE_TYPE, default="KC868_A64"): str,
+                vol.Required(CONF_DEVICE_TYPE): str,
             }),
             errors=errors,
         )
@@ -131,16 +141,6 @@ class KinconyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 CONF_INPUTS: input_keys,
                 CONF_OUTPUTS: output_keys,
             }
-
-                
-            self.context.update(
-                {
-                    "title_placeholders": {
-                        "device_id": device_id,
-                        "device_type": device_type,
-                    }
-                }
-            )
 
             # Show confirmation form
             return await self.async_step_confirm()

@@ -9,7 +9,10 @@
             "discovery_failed": "Discovery failed"
         },
         "error": {
-            "cannot_connect": "Failed to connect to device"
+            "cannot_connect": "Failed to connect to device",
+            "missing_device_id": "Device ID is required",
+            "missing_device_type": "Device type is required",
+            "missing_entities": "No inputs or outputs found in configuration"
         },
         "flow_title": "{device_type} {device_id}",
         "step": {
